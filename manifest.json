@@ -1,0 +1,17 @@
+{
+    "name": "World Clock",
+    "icons": [
+      {
+        "src": "icons/logo512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+      ,{
+        "src": "icons/logo192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      }
+    ],
+    "start_url": ".",
+    "display": "fullscreen"
+  }
