@@ -90,9 +90,16 @@
             }
         }
 
-        @media (max-width: 600px) {
+        @media screen and (max-width: 500px) {
+            body{
+                overflow: scroll;
+            }
+
             .bg {
-                padding: 1rem;
+                user-select: none;
+                width: 70vw;
+                margin-top: 20px;
+                margin-bottom: 10px;
             }
 
             .city-card {
