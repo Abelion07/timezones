@@ -20,7 +20,6 @@ body {
   border-radius: 24px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  width: 45vw;
 }
 
 .city-card {
@@ -41,7 +40,6 @@ body {
 
 .city-card:hover {
   cursor: pointer;
-  transform: translateY(-5px);
 }
 
 .city-card:nth-child(1) {
@@ -54,19 +52,22 @@ body {
   animation-delay: 0.3s;
 }
 .city-card:nth-child(4) {
-  animation-delay: 0.4s;
+  animation-delay: 0.1s;
 }
 .city-card:nth-child(5) {
-  animation-delay: 0.5s;
+  animation-delay: 0.2s;
 }
 .city-card:nth-child(6) {
-  animation-delay: 0.6s;
+  animation-delay: 0.3s;
 }
 .city-card:nth-child(7) {
-  animation-delay: 0.7s;
+  animation-delay: 0.1s;
 }
 .city-card:nth-child(8) {
-  animation-delay: 0.8s;
+  animation-delay: 0.2s;
+}
+.city-card:nth-child(9) {
+  animation-delay: 0.3s;
 }
 
 .city-info {
@@ -116,8 +117,6 @@ img {
   transform: translate(-50%, -50%);
   min-width: 45vw;
   max-width: 90vw;
-  min-height: 50vh;
-  max-height: 90vh;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 18px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
@@ -130,6 +129,12 @@ img {
   font-size: 1.1rem;
   color: #222;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+  overflow-y: hidden;
+  height: 80vh;
+}
+
+h3, p{
+  margin: 5px;
 }
 
 .idojaras-rejtett {
@@ -146,6 +151,21 @@ img {
   cursor: pointer;
 }
 
+table{
+  width: 70%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  /* border: #222 1px solid; */
+  border-radius: 10px;
+}
+
+td, th, tr{
+  border-radius: 10px;
+  padding: 0.5rem;
+  text-align: center;
+  border: 1px solid #222;
+}
+
 @media screen and (max-width: 500px) {
   body {
     overflow: auto;
@@ -159,6 +179,7 @@ img {
     margin-bottom: 10px;
     display: flex;
     flex-direction: column;
+
   }
 
   .city-card {
@@ -173,8 +194,19 @@ img {
     font-size: 1rem;
   }
   .idojaras{
-    width: 77vw;
+    width: 60vw;
     height: 90vh;
-    padding: 20px;
+    padding: 0 40px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  h3, p{
+    margin: 0;
+  }
+
+  table{
+    width: 30vw;
+    font-size: 13px;
   }
 }

@@ -1,21 +1,23 @@
-const countries = ["US", "US", "US", "US", "HU", "HU", "FR", "NL"];
+const countries = ["HU", "HU", "US", "US", "US", "US", "US", "FR", "NL"];
 const cities = [
-  "Los Angeles",
-  "San Francisco",
-  "Washington D.C.",
-  "New York",
   "Hajdúböszörmény",
   "Üröm",
+  "Los Angeles",
+  "San Francisco",
+  "Las Vegas",
+  "Washington D.C.",
+  "New York",
   "Párizs",
   "Amszterdam",
 ];
 const coordinates = [
-  { lat: 34.0522, lon: -118.2437 }, // Los Angeles
-  { lat: 37.7749, lon: -122.4194 }, // San Francisco
-  { lat: 38.89511, lon: -77.03637 }, // Washington D.C.
-  { lat: 40.7128, lon: -74.0060 }, // New York
   { lat: 47.6691, lon: 21.5121 }, // Hajdúböszörmény
   { lat: 47.6142, lon: 18.9632 }, // Üröm
+  { lat: 34.0522, lon: -118.2437 }, // Los Angeles
+  { lat: 37.7749, lon: -122.4194 }, // San Francisco
+  { lat: 36.1699, lon: -115.1398 }, // Las Vegas
+  { lat: 38.89511, lon: -77.03637 }, // Washington D.C.
+  { lat: 40.7128, lon: -74.006 }, // New York
   { lat: 48.8566, lon: 2.3522 }, // Párizs
   { lat: 52.3676, lon: 4.9041 }, // Amszterdam
 ];
@@ -56,6 +58,9 @@ for (let i = 0; i < cities.length; i++) {
       timeZone = "America/Los_Angeles";
       break;
     case "San Francisco":
+      timeZone = "America/Los_Angeles";
+      break;
+    case "Las Vegas":
       timeZone = "America/Los_Angeles";
       break;
     case "New York":
@@ -130,12 +135,52 @@ cityInfos.forEach((info, index) => {
 function adatkiirás(data, index) {
   idojarasablak.innerHTML = `
   <button onclick="bezar()">&times;</button>
-  <h3>${cities[index]}</h3>
-  <h2>${getWeatherIcon(data.current.weather_code).icon} ${
+  <h4>${cities[index]}, ${countries[index]}</h4>
+  <h3>
+  ${getWeatherIcon(data.current.weather_code).icon} ${
     data.current.temperature_2m
-  } ${data.daily_units.temperature_2m_max}</h2>
-  <p>${getWeatherIcon(data.current.weather_code).description}</p>`;
+  } ${data.daily_units.temperature_2m_max}
+  ${getWeatherIcon(data.current.weather_code).description}
+  </h3>
+  <p>
+  🌡️ ${data.daily.temperature_2m_min[0]}${
+    data.daily_units.temperature_2m_max
+  } → ${data.daily.temperature_2m_max[0]}${data.daily_units.temperature_2m_max}
+  </p>
+  <p>🌧️ ${data.current.rain}${
+    data.current_units.relative_humidity_2m
+  } csapadék</p>
+  <p>💨 ${data.current.wind_speed_10m}${
+    data.current_units.wind_speed_10m
+  } szélsebesség</p>
+  `;
   // console.log(getWeatherIcon(4))
+  let table = `<table>
+    <thead>
+      <tr>
+        <th>Dátum</th>
+        <th>Nap</th>
+        <th>Időjárás</th>
+        <th>Min hőm.</th>
+        <th>Max hőm.</th>
+      </tr>
+    </thead>
+    <tbody>
+  `;
+  for (let i = 1; i < 7; i++) {
+    const iconObj = getWeatherIcon(data.daily.weather_code[i]);
+    table += `
+      <tr>
+        <td>${data.daily.time[i]}</td>
+        <td>${melyiknap(data.daily.time[i])}</td>
+        <td>${iconObj.icon} ${iconObj.description}</td>
+        <td>${data.daily.temperature_2m_min[i]}${data.daily_units.temperature_2m_min}</td>
+        <td>${data.daily.temperature_2m_max[i]}${data.daily_units.temperature_2m_max}</td>
+      </tr>
+    `;
+  }
+  table += `</tbody></table>`;
+  idojarasablak.innerHTML += table;
 }
 
 function bezar() {
@@ -178,4 +223,15 @@ function getWeatherIcon(weatherCode) {
   return (
     weatherMap[weatherCode] || { icon: "❓", description: "Unknown weather" }
   );
+}
+
+function melyiknap(datum) {
+  const date = new Date(datum);
+
+  // Napok nevei
+  const daysOfWeek = ["Vas", "H", "Ke", "Szer", "Csüt", "Pén", "Szo"];
+
+  const dayName = daysOfWeek[date.getDay()];
+
+  return dayName;
 }
