@@ -122,7 +122,7 @@ cityInfos.forEach((info, index) => {
     // console.log(cities[index].split("/")[0]);
     // console.log(`lat: ${coordinates[index].lat}, lon: ${coordinates[index].lon}`);
     fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${coordinates[index].lat}&longitude=${coordinates[index].lon}&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset&current=temperature_2m,rain,relative_humidity_2m,wind_speed_10m&timezone=auto&daily=weather_code&current=weather_code`
+      `https://api.open-meteo.com/v1/forecast?latitude=${coordinates[index].lat}&longitude=${coordinates[index].lon}&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset&current=temperature_2m,rain,relative_humidity_2m,wind_speed_10m&timezone=auto&daily=weather_code&current=weather_code&hourly=temperature_2m,weather_code`
     )
       .then((r) => r.json())
       .then((data) => {
@@ -154,6 +154,15 @@ function adatkiirás(data, index) {
     data.current_units.wind_speed_10m
   } szélsebesség</p>
   `;
+  const today = new Date().toISOString().slice(0, 10);
+  const time = new Date();
+  const hanyora = `${time.getHours()}:${time.getMinutes()}`;
+  const csakMa = data.hourly.time
+    .filter((t) => t.startsWith(today))
+    .map((f) => f.split("T"))
+    .filter((f) => f[1] > hanyora);
+  console.log(csakMa);
+
   // console.log(getWeatherIcon(4))
   let table = `<table>
     <thead>
@@ -174,9 +183,31 @@ function adatkiirás(data, index) {
         <td>${data.daily.time[i]}</td>
         <td>${melyiknap(data.daily.time[i])}</td>
         <td>${iconObj.icon} ${iconObj.description}</td>
-        <td>${data.daily.temperature_2m_min[i]}${data.daily_units.temperature_2m_min}</td>
-        <td>${data.daily.temperature_2m_max[i]}${data.daily_units.temperature_2m_max}</td>
+        <td>${data.daily.temperature_2m_min[i]}${
+      data.daily_units.temperature_2m_min
+    }</td>
+        <td>${data.daily.temperature_2m_max[i]}${
+      data.daily_units.temperature_2m_max
+    }</td>
       </tr>
+    `;
+  }
+
+  idojarasablak.innerHTML += `<div class="orak"></div>`;
+  const orak = document.querySelector(".orak");
+
+  for (let i = 0; i < csakMa.length; i++) {
+    orak.innerHTML += `
+    <div class="ora">
+    <p class="hanyora">
+    ${csakMa[i][1]} 
+    </p>
+    <p class="hanyfoknapi">
+    ${data.hourly.temperature_2m[i]}
+    ${data.hourly_units.temperature_2m}
+    </p>
+    <p>${getWeatherIcon(data.hourly.weather_code[i]).icon}</p>
+    </div>
     `;
   }
   table += `</tbody></table>`;
